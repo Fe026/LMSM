@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="img/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="img/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="img/favicon-64x64.png" sizes="64x64">
+    <link rel="icon" type="image/png" href="img/favicon-96x96.png" sizes="96x96">
+    <title>LMSM</title>
+</head>
+<body>
+    <div id="override">
+        <!--
+        <div id="notification-mode" onclick="notification('modeChange')">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-labelledby="bellIconTitle" stroke="#000000" stroke-width="1" stroke-linecap="square" stroke-linejoin="miter" fill="none" color="#000000"> <title id="bellIconTitle">Notification</title> <path stroke-linejoin="round" d="M10.5,4.5 C12.1666667,4.5 13.8333333,4.5 15.5,4.5 C17.5,4.5 18.8333333,3.83333333 19.5,2.5 L19.5,18.5 C18.8333333,17.1666667 17.5,16.5 15.5,16.5 C13.8333333,16.5 12.1666667,16.5 10.5,16.5 L10.5,16.5 C7.1862915,16.5 4.5,13.8137085 4.5,10.5 L4.5,10.5 C4.5,7.1862915 7.1862915,4.5 10.5,4.5 Z" transform="rotate(90 12 10.5)"/> <path d="M11,21 C12.1045695,21 13,20.1045695 13,19 C13,17.8954305 12.1045695,17 11,17" transform="rotate(90 12 19)"/> </svg>
+            <a class="notification-clear-button">通知オン</a>
+        </div>
+        -->
+        <div id="clear-notifications" onclick="notification('clear')">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><defs><style>.a{fill: none;stroke-linecap: round;stroke-linejoin: round;stroke-width: 2px;}</style></defs><g><path class="a" d="M32.54,19,31.76,35a2.21,2.21,0,0,1-2.21,2.08H18.45A2.21,2.21,0,0,1,16.24,35L15.46,19"/><line class="a" x1="21.26" y1="21.44" x2="21.26" y2="31.19"/><line class="a" x1="26.71" y1="21.44" x2="26.71" y2="31.19"/><polygon class="a" points="28.25 15.83 19.71 15.83 21.26 10.88 26.71 10.88 28.25 15.83"/><path class="a" d="M14.5,15.9h19"/></g></svg>
+            <a class="notification-clear-button">全通知削除</a>
+        </div>
+    </div>
+    <header>
+        <a id="menu-toggle" onclick="menu()">
+            <svg id="hamburger" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48"><defs><style>.cls-1,.cls-2{fill:none;}.cls-2{stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style></defs><g id="レイヤー_2" data-name="レイヤー 2"><g id="icon_data"><line class="cls-2" x1="10" y1="12" x2="26" y2="12"/><line class="cls-2" x1="34" y1="12" x2="38" y2="12"/><line class="cls-2" x1="28" y1="24" x2="38" y2="24"/><line class="cls-2" x1="22" y1="36" x2="38" y2="36"/><line class="cls-2" x1="10" y1="24" x2="20" y2="24"/><line class="cls-2" x1="10" y1="36" x2="14" y2="36"/></g></g></svg>
+            <svg id="cross" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48"><defs><style>.cls-1,.cls-2{fill:none;}.cls-2{stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style></defs><g id="レイヤー_2" data-name="レイヤー 2"><g id="icon_data"><line class="cls-2" x1="12.13" y1="12.63" x2="36.13" y2="36.13"/><line class="cls-2" x1="12.38" y1="36.38" x2="35.88" y2="12.38"/></g></g></svg>
+        </a>
+        <a>LMSM</a>
+        <a class="button" onclick="shutdown()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-labelledby="powerIconTitle" stroke="#000000" stroke-width="1" stroke-linecap="square" stroke-linejoin="miter" fill="none" color="#2329D6"> <title id="powerIconTitle">Power</title> <path d="M12 2L12 11M18.363961 5.63603897C21.8786797 9.15075759 21.8786797 14.8492424 18.363961 18.363961 14.8492424 21.8786797 9.15075759 21.8786797 5.63603897 18.363961 2.12132034 14.8492424 2.12132034 9.15075759 5.63603897 5.63603897"/></svg></a>
+    </header>
+    <main>
+        <ul id="list-wrapper">
+        </ul>
+    </main>
+    <aside id="aside">
+        <p id="user-ID"></p>
+        <div id="selector">
+            <div class="buttons-wrapper">
+                <a class="button main-button" onclick="listUpdate('cdA')"><svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48"><defs><style>.cls-1,.cls-2{fill:none;}.cls-2{stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style></defs><g id="レイヤー_2" data-name="レイヤー 2"><g id="icon_data"><polyline class="cls-2" points="17.18 15 8.18 15 8.18 6"/><path class="cls-2" d="M10.58,12A18,18,0,1,1,6.23,26.88"/></g></g></svg>データ更新</a>
+                <a class="arrow-button" onclick="openButton()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-labelledby="chevronDownIconTitle" stroke="#000000" stroke-width="1" stroke-linecap="square" stroke-linejoin="miter" fill="none" color="#000000"> <title id="chevronDownIconTitle">Chevron Down</title> <polyline points="6 10 12 16 18 10"/> </svg></a>
+                <a class="button co-button" onclick="listUpdate('c')"><svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48"><defs><style>.cls-1,.cls-2{fill:none;}.cls-2{stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style></defs><g id="レイヤー_2" data-name="レイヤー 2"><g id="icon_data"><polyline class="cls-2" points="17.18 15 8.18 15 8.18 6"/><path class="cls-2" d="M10.58,12A18,18,0,1,1,6.23,26.88"/></g></g></svg>クラスリスト更新</a>
+            </div>
+            <a class="button" onclick="visible('within')"><svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48"><path d="M25,46a22,22,0,1,1,15.8-6.69" fill="none" stroke="#000" stroke-linecap="square" stroke-linejoin="round" stroke-width="2"/><polyline points="25 16.77 25 24 31 30" fill="none" stroke="#000" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/><line x1="25" y1="8" x2="25" y2="9" fill="none" stroke="#000" stroke-linecap="square" stroke-linejoin="round" stroke-width="2"/><line x1="25" y1="39" x2="25" y2="40" fill="none" stroke="#000" stroke-linecap="square" stroke-linejoin="round" stroke-width="2"/><line x1="41" y1="24" x2="40" y2="24" fill="none" stroke="#000" stroke-linecap="square" stroke-linejoin="round" stroke-width="2"/><line x1="10" y1="24" x2="9" y2="24" fill="none" stroke="#000" stroke-linecap="square" stroke-linejoin="round" stroke-width="2"/><polyline points="39 33 39 40 46 40" fill="none" stroke="#000" stroke-linecap="square" stroke-linejoin="round" stroke-width="2"/></svg>期間中のみ表示</a>
+            <a class="button" onclick="visible('all')"><svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-labelledby="eyeIconTitle" stroke="#000000" stroke-width="1" stroke-linecap="square" stroke-linejoin="miter" fill="none" color="#000000"><path d="M22 12C22 12 19 18 12 18C5 18 2 12 2 12C2 12 5 6 12 6C19 6 22 12 22 12Z"/> <circle cx="12" cy="12" r="3"/> </svg>全表示</a>
+            <a class="button" onclick="sort('name')"><svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" aria-labelledby="bookIconTitle" stroke="#000000" stroke-width="1" stroke-linecap="square" stroke-linejoin="miter" fill="none" color="#000000"><path d="M19 3v18H8a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h11z"/> <path d="M5 18a3 3 0 0 1 3-3h11"/> </svg>科目名でソート</a>
+            <a class="button" onclick="sort('startDate')"><svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-labelledby="calendarEventIconTitle" stroke="#000000" stroke-width="1" stroke-linecap="square" stroke-linejoin="miter" fill="none" color="#000000"><path d="M3 5H21V21H3V5Z"/> <path d="M21 9H3"/> <path d="M7 5V3"/> <path d="M17 5V3"/> <rect x="8" y="13" width="2" height="2"/> </svg>開始日でソート</a>
+            <a class="button" onclick="sort('endDate')"><svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-labelledby="calendarEventIconTitle" stroke="#000000" stroke-width="1" stroke-linecap="square" stroke-linejoin="miter" fill="none" color="#000000"><path d="M3 5H21V21H3V5Z"/> <path d="M21 9H3"/> <path d="M7 5V3"/> <path d="M17 5V3"/> <rect x="15" y="15" width="2" height="2"/> </svg>終了日でソート</a>
+            <!--
+            <a class="button" onclick="view('checked')"><svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48"><defs><style>.cls-1,.cls-2{fill:none;}.cls-2{stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style></defs><g id="レイヤー_2" data-name="レイヤー 2"><g id="icon_data"><polyline class="cls-2" points="11.13 28.13 19.33 36.33 39.16 17.51"/></g></g></svg>完了済み表示</a>
+            <a class="button" onclick="view('deleted')"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><defs><style>.a{fill: none;stroke: #231815;stroke-linecap: round;stroke-linejoin: round;stroke-width: 2px;}</style></defs><title>1034_tr_h</title><g><path class="a" d="M32.54,19,31.76,35a2.21,2.21,0,0,1-2.21,2.08H18.45A2.21,2.21,0,0,1,16.24,35L15.46,19"/><line class="a" x1="21.26" y1="21.44" x2="21.26" y2="31.19"/><line class="a" x1="26.71" y1="21.44" x2="26.71" y2="31.19"/><polygon class="a" points="28.25 15.83 19.71 15.83 21.26 10.88 26.71 10.88 28.25 15.83"/><path class="a" d="M14.5,15.9h19"/></g></svg>削除済み表示</a>
+            -->
+        </div>
+        <p id="aside-version"></p>
+    </aside>
+    <footer>
+        <div id="social-icons">
+            <div class="media-icon width-3">
+                <a href="https://webclass.tcu.ac.jp/webclass/login.php" target="_blank"><img alt="Web Class logo" src="./img/social-media-icons/webclass.png"></a>
+            </div>
+            <div class="media-icon width-1">
+                <a href="https://twitter.com/Fe_univ" target="_blank"><img alt="Twitter logo" src="./img/social-media-icons/twitter.svg"></a>
+            </div>
+            <div class="media-icon width-1">
+                <a href="https://github.com/Fe026/LMSM" target="_blank"><img alt="GitHub logo" src="./img/social-media-icons/github.svg"></a>
+            </div>
+            <div class="media-icon width-1">
+                <a href="https://www.google.com/intl/ja_jp/chrome/" target="_blank"><img alt="Google Chrome logo" src="./img/social-media-icons/chrome.svg"></a>
+            </div>
+            <div class="media-icon width-1">
+                <a href="https://www.rust-lang.org/ja/" target="_blank"><img alt="Rust logo" src="./img/social-media-icons/rust.svg"></a>
+            </div>
+            <div class="media-icon width-1">
+                <a href="https://go.dev/" target="_blank"><img alt="Go logo" src="./img/social-media-icons/golang.svg"></a>
+            </div>
+            <div class="media-icon width-1">
+                <a href="https://www.python.org/" target="_blank"><img alt="Python logo" src="./img/social-media-icons/python.svg"></a>
+            </div>
+        </div>
+        <div id="copyright">&copy; 2022 Fe</div>
+    </footer>
+</body>
+<style>
+    :root {
+        --color-050: #ECEFF1;
+        --color-t050: #ECEFF1c0;
+        --color-100: #CFD8DC;
+        --color-200: #B0BEC5;
+        --color-300: #90A4AE;
+        --color-400: #78909C;
+        --color-500: #607D8B;
+        --color-600: #546E7A;
+        --color-700: #455A64;
+        --color-800: #37474F;
+        --color-900: #263238;
+        --color-t900: #263238c0;
+        --color-alert: #bf1e1e;
+        --color-warning: #ddc819;
+        --color-info: #1e1ebf;
+        --color-done: #1f9b1f;
+    }
+
+    * {
+        color: var(--color-900);
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background: var(--color-050);
+    }
+
+    #override{
+        bottom: .3rem;
+        position: fixed;
+        right: 0;
+        z-index: 998;
+    }
+
+    #clear-notifications,
+    #notification-mode {
+        align-items: center;
+        backdrop-filter: blur(3rem);
+        background: var(--color-t050);
+        border-radius: 1.3rem;
+        bottom: 1.3rem;
+        box-shadow: var(--color-900) 0 0 0 0;
+        cursor: pointer;
+        display: flex;
+        flex-shrink: 0;
+        height: 0rem;
+        overflow: hidden;
+        position: absolute;
+        right: 1.3rem;
+        transition: .3s;
+        width: 0rem;
+        z-index: 998;
+    }
+
+    #clear-notifications.visible,
+    #notification-mode {
+        bottom: 0rem;
+        box-shadow: var(--color-900) 0 0 0 1px;
+        height: 2.6rem;
+        right: 1px;
+        width: 2.6rem;
+    }
+
+    #clear-notifications svg {
+        height: 2.6rem;
+        min-width: 2.6rem;
+        width: 2.6rem;
+    }
+
+    #notification-mode svg {
+        height: 2.1rem;
+        padding: .275rem;
+        min-width: 2.1rem;
+        width: 2.1rem;
+    }
+
+    #clear-notifications a,
+    #notification-mode a {
+        min-width: 5rem;
+    }
+
+    #clear-notifications *,
+    #notification-mode * {
+        stroke: var(--color-900);
+        transition: .3s;
+    }
+
+    #clear-notifications.visible:hover,
+    #notification-mode.visible:hover {
+        box-shadow: var(--color-alert) 0 0 0 1px;
+        width: 9rem;
+    }
+
+    #clear-notifications.visible:hover *,
+    #notification-mode.visible:hover * {
+        color: var(--color-alert);
+        stroke: var(--color-alert);
+    }
+
+    .notification-container {
+        backdrop-filter: blur(3rem);
+        background: var(--color-050);
+        border-left: solid .6rem var(--color-900);
+        border-right: solid 1px var(--color-900);
+        box-shadow: var(--color-900) 1px 0 0 1px;
+        box-sizing: border-box;
+        margin: .3rem 0 0 auto;
+        overflow: hidden;
+        padding: .6rem;
+        position: relative;
+        min-height: 8rem;
+        width: 20.6rem;
+    }
+
+    .notification-container * {
+        stroke: var(--color-900);
+        width: 20rem;
+    }
+
+    .notification-container.in {
+        animation:  notification-transition-height .45s forwards,
+                    notification-transition-width .45s .45s forwards,
+                    notification-transition-padding .90s forwards;
+    }
+
+    .notification-container.out {
+        animation:  notification-transition-width .45s reverse forwards,
+                    notification-transition-height .45s .45s reverse forwards,
+                    notification-transition-padding .90s reverse forwards;
+    }
+
+    @keyframes notification-transition-width {
+        0% {
+            border-left-width: 0rem;
+            width: 0rem;
+        }
+        100% {
+            border-left-width: .6rem;
+            width: 20.6rem;
+        }
+    }
+
+    @keyframes notification-transition-height {
+        0% {
+            min-height: 0rem;
+            height: 0rem;
+            margin: 0rem 0 0 auto;
+        }
+        50% {
+            min-height: 8rem;
+            margin: .3rem 0 0 auto;
+        }
+        100% {
+            min-height: 8rem;
+            margin: .3rem 0 0 auto;
+        }
+    }
+
+    @keyframes notification-transition-padding {
+        0%{
+            border-left-width: 0rem;
+            border-right-width: 0px;
+            padding: 0rem 0rem;
+            width: 0rem;
+        }
+        25%{
+            padding: .6rem 0rem;
+        }
+        50%{
+            border-left-width: 0rem;
+            border-right-width: 0px;
+            padding: .6rem 0rem;
+            width: 0rem;
+        }
+        100%{
+            padding: .6rem .6rem;
+        }
+    }
+
+    .notification-title {
+        font-size: 1.5rem;
+        line-height: 1.8rem;
+    }
+
+    .notification-container.error {
+        background: var(--color-050);
+        border-color: var(--color-alert);
+        box-shadow: var(--color-alert) 1px 0 0 1px;
+    }
+
+    .notification-container.warning {
+        background: var(--color-050);
+        border-color: var(--color-warning);
+        box-shadow: var(--color-warning) 1px 0 0 1px;
+    }
+
+    .notification-contents {
+        width: 17.7rem;
+    }
+
+    .notification-close-button {
+        display: block;
+        right: .3rem;
+        position: absolute;
+        top: .3rem;
+        height: 2rem;
+        width: 2rem;
+    }
+
+    .notification-close-button svg {
+        height: 2rem;
+        width: 2rem;
+    }
+
+    header {
+        align-content: center;
+        align-items: center;
+        background: var(--color-900);
+        display: flex;
+        height: 3rem;
+        justify-content: flex-start;
+        overflow: hidden;
+        position: fixed;
+        text-align: center;
+        width: 100%;
+        z-index: 999;
+    }
+
+    header * {
+        color: #ECEFF1;
+    }
+
+    header a#menu-toggle {
+        margin: .5rem 3rem 0 .5rem;
+        overflow: hidden;
+        padding: 2.5rem 0 0;
+        width: 2rem;
+    }
+
+    header a#menu-toggle.visible {
+        padding: 0 0 2.5rem;
+    }
+
+    header .button {
+        background: #26323800;
+        border-radius: 50%;
+        box-shadow: 0 0 0 1px #bf1e1e00;
+        height: 2rem;
+        padding: .21rem;
+        position: absolute;
+        right: .5rem;
+        transition: .15s;
+        width: 2rem;
+    }
+
+    header .button:hover {
+        background: var(--color-050);
+        box-shadow: 0 0 0 1px var(--color-alert);
+    }
+
+    header svg {
+        height: 2rem;
+        transition: .15s;
+        width: 2rem;
+    }
+
+    header svg * {
+        stroke: var(--color-050) !important;
+        transition: .15s;
+    }
+
+    header .button:hover svg *{
+        stroke: var(--color-alert) !important;
+    }
+
+    main {
+        padding: 3rem 0 0;
+        min-height: calc(100vh - 34rem);
+    }
+
+    #list-wrapper {
+        align-items: stretch;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        margin: auto 5%;
+    }
+
+    .list-header {
+        background: var(--color-700);
+        border-left: var(--color-700) .6rem solid;
+        margin: 0 !important;
+    }
+
+    .list-header * {
+        background: var(--color-700);
+        border: none;
+        border-radius: 0 !important;
+        color: var(--color-050);
+        height: 100%;
+        width: 100%;
+    }
+
+    .list-header .list-items.checkbox:hover,
+    .list-header .list-items.delete:hover {
+        background: var(--color-700);
+    }
+
+    .list-header.list-group:hover .list-items.checkbox:hover,
+    .list-header.list-group:hover .list-items.delete:hover {
+        box-shadow: var(--color-done) 0 0 0 0;
+    }
+
+    .list-group {
+        align-items: center;
+        border-bottom: var(--color-900) 1px solid;
+        column-gap: 1.2rem;
+        display: grid;
+        grid-template-columns: 1.8rem 1fr 18rem 8rem 12rem 2rem;
+        grid-template-rows: 1fr;
+        height: 3rem;
+        justify-content: space-between;
+        justify-items: center;
+        margin: 0 0 .21rem;
+        overflow: hidden;
+        padding: .3rem 1.25rem;
+        text-align: center;
+        transition: .15s;
+    }
+
+    .list-group.out {
+        animation: list-group-out .3s forwards;
+    }
+
+    @keyframes list-group-out {
+        0%{
+            border-bottom: var(--color-900) 1px solid;
+            height: 3rem;
+            margin: 0 0 .21rem;
+            padding: .3rem 1.25rem;
+        }
+        100%{
+            border-bottom: var(--color-900) 0 solid;
+            height: 0rem;
+            margin: 0 0 0rem;
+            padding: 0rem 1.25rem;
+        }
+    }
+
+    .list-group.active {
+        border-left: var(--color-700) .6rem solid;
+    }
+
+    .list-group.inactive {
+        border-left: var(--color-100) .6rem solid;
+    }
+
+    .list-group.active:hover,
+    .list-group.inactive:hover {
+        background: var(--color-700);
+        border-left: var(--color-700) .6rem solid;
+    }
+
+    .list-group:hover * {
+        color: var(--color-050);
+    }
+
+    .list-items {
+        display: block;
+        line-height: 1.25em;
+    }
+
+    .list-items.checkbox {
+        border-radius: 1.1rem;
+        height: 1.8rem;
+        padding: .21rem;
+        transition: .3s;
+        width: 1.8rem;
+    }
+
+    .list-items.checkbox:hover {
+        background: var(--color-050);
+    }
+
+    .list-items.checkbox * {
+        stroke: var(--color-050);
+    }
+
+    .list-items.checkbox.checked * {
+        stroke: var(--color-done);
+    }
+
+    .list-group:hover .list-items.checkbox * {
+        stroke: var(--color-050);
+    }
+
+    .list-group:hover .list-items.checkbox:hover {
+        box-shadow: var(--color-done) 0 0 0 1px;
+    }
+
+    .list-group:hover .list-items.checkbox:hover * {
+        stroke: var(--color-done);
+    }
+
+    .list-group:hover .list-items.checkbox.checked:hover {
+        box-shadow: var(--color-alert) 0 0 0 1px;
+    }
+
+    .list-group:hover .list-items.checkbox.checked:hover * {
+        stroke: var(--color-alert);
+    }
+
+    .list-items.title {
+        width: 100%;
+    }
+
+    .list-items.date {
+        column-gap: 1.2rem;
+        display: flex;
+    }
+
+    .list-items.delete {
+        border-radius: 1rem;
+        box-shadow: var(--color-done) 0 0 0 0px;
+        height: 2rem;
+        transition: .15s;
+        width: 2rem;
+    }
+
+    .list-items.delete:hover {
+        background: var(--color-050);
+        box-shadow: var(--color-alert) 0 0 0 1px;
+    }
+
+    .list-items.delete svg {
+        height: 100%;
+        width: 100%;
+    }
+
+    .list-items.delete * {
+        stroke: var(--color-900);
+        transition: .15s;
+    }
+
+    .list-group:hover .list-items.delete * {
+        stroke: var(--color-050);
+    }
+
+    .list-group:hover .list-items.delete:hover * {
+        stroke: var(--color-alert);
+    }
+
+    aside {
+        align-content: center;
+        backdrop-filter: blur(3rem);
+        background: var(--color-t050);
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        left: 0;
+        overflow: hidden;
+        position: fixed;
+        text-align: center;
+        top: 3rem;
+        transition: .21s;
+        min-width: 0;
+        width: 0;
+        z-index: 999;
+    }
+
+    aside.visible {
+        min-width: 15rem;
+        width: 12vw;
+    }
+
+    #user-ID {
+        line-height: 3rem;
+    }
+    
+    #selector {
+        align-content: center;
+        display: flex;
+        flex-wrap: wrap;
+        row-gap: 1rem;
+        justify-content: center;
+    }
+
+    #selector .buttons-wrapper {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        row-gap: 1rem;
+        height: calc(3rem + 2px);
+        overflow: hidden;
+        transition: .21s;
+        width: calc(10vw + 2px);
+        min-width: calc(12rem + 2px);
+        max-width: calc(100% + 2px);
+    }
+
+    #selector .buttons-wrapper .arrow-button {
+        background: var(--color-100);
+        border-bottom: solid 1px var(--color-900);
+        border-right: solid 1px var(--color-900);
+        border-top: solid 1px var(--color-900);
+        cursor: pointer;
+        display: inline-block;
+        height: 3rem;
+        width: calc(1.5rem - 1px);
+    }
+
+    #selector .buttons-wrapper .arrow-button:hover {
+        background: var(--color-700);
+    }
+
+    #selector .buttons-wrapper.open .arrow-button {
+        background: var(--color-700);
+    }
+    
+    #selector .buttons-wrapper .arrow-button svg {
+        display: inline-block;
+        height: 3rem;
+        transition: .21s;
+        width: 1.5rem;
+    }
+
+    #selector .buttons-wrapper .arrow-button:hover svg {
+        transform: rotate(-180deg);
+    }
+
+    #selector .buttons-wrapper .arrow-button:hover svg * {
+        stroke: var(--color-050);
+    }
+
+    #selector .buttons-wrapper.open .arrow-button svg {
+        display: inline-block;
+        height: 3rem;
+        transform: rotate(-180deg);
+        width: 1.5rem;
+    }
+
+    #selector .buttons-wrapper.open .arrow-button svg *{
+        stroke: var(--color-050);
+    }
+
+
+    #selector .button {
+        align-items: center;
+        background: var(--color-100);
+        border-radius: 0;
+        border: solid 1px var(--color-900);
+        cursor: pointer;
+        display: flex;
+        flex-wrap: nowrap;
+        height: 3rem;
+        width: 10vw;
+        min-width: 12rem;
+        max-width: 100%;
+        transition: .15s;
+    }
+
+    #selector .button:hover {
+        background: var(--color-700);
+        border: solid 1px var(--color-700);
+        color: var(--color-050);
+    }
+
+    #selector .buttons-wrapper .main-button {
+        width: calc(10vw - 1.5rem);
+        min-width: 10.5rem;
+        max-width: calc(100% - 1.5rem);
+    }
+
+    #selector .button img,
+    #selector .button svg {
+        height: 2rem;
+        margin: .5rem .6rem;
+        transition: .15s;
+        width: 2rem;
+    }
+
+    #selector .button svg * {
+        stroke: var(--color-900);
+    }
+
+    #selector .button:hover svg * {
+        stroke: var(--color-050);
+    }
+
+    #selector .button[onclick="view('checked')"]:hover {
+        background: var(--color-050);
+        border: solid 1px var(--color-done);
+        color: var(--color-done);
+    }
+
+    #selector .button[onclick="view('checked')"]:hover svg * {
+        stroke: var(--color-done);
+    }
+
+    #selector .button[onclick="view('deleted')"]:hover {
+        background: var(--color-050);
+        border: solid 1px var(--color-alert);
+        color: var(--color-alert);
+    }
+
+    #selector .button[onclick="view('deleted')"]:hover svg * {
+        stroke: var(--color-alert);
+    }
+
+    #aside-version {
+        bottom: .9rem;
+        color: var(--color-600);
+        left: 0;
+        position: absolute;
+        min-width: 15rem;
+        width: 12vw;
+    }
+
+    footer {
+        background: var(--color-900);
+        height: 20rem;
+        margin: 8rem 0 0;
+        padding: 1.5rem;
+        text-align: center;
+        position: relative;
+    }
+
+    footer * {
+        color: var(--color-050);
+    }
+
+    #social-icons {
+        display: flex;
+        flex-wrap: wrap;
+        width: 18rem;
+    }
+
+    #social-icons .media-icon a {
+        background: var(--color-050);
+        border-radius: .5rem;
+        box-shadow: var(--color-900) 0 0 0 0;
+        display: block;
+        height: 3rem;
+        margin: .75rem;
+        padding: .75rem;
+        transition: .15s;
+    }
+
+    #social-icons .media-icon a:hover {
+        box-shadow: var(--color-400) 0 0 0 .15rem;
+    }
+    
+    #social-icons .media-icon img {
+        height: 3rem;
+    }
+    
+    #social-icons .media-icon.width-1 a,
+    #social-icons .media-icon.width-1 img {
+        width: 3rem;
+    }
+
+    #social-icons .media-icon.width-3 a,
+    #social-icons .media-icon.width-3 img {
+        width: 15rem;
+    }
+
+    @media (max-width: 70rem) {
+        .list-group {
+            align-items: center;
+            border-bottom: var(--color-900) 1px solid;
+            display: grid;
+            grid-template-columns: 2rem 1fr 2rem;
+            grid-template-rows: 2.5rem 2rem 2rem;
+            height: 2.5rem;
+            justify-content: space-between;
+            justify-items: center;
+            margin: 0 0 .21rem;
+            overflow: hidden;
+            padding: .3rem 3%;
+            text-align: center;
+            transition: .15s;
+        }
+        
+        .list-group.visible {
+            height: auto;
+        }
+
+        .list-group .checkbox {
+            grid-row: 1;
+        }
+
+        .list-group.visible .checkbox {
+            grid-row: 1/5;
+        }
+
+        .list-group .title {
+            font-weight: 600;
+        }
+        
+        .list-group .class-name {
+            grid-row: 5;
+        }
+
+        .list-group.visible .class-name {
+            grid-row: 2;
+        }
+
+        .list-group .type {
+            grid-row: 3;
+        }
+
+        .list-group .date {
+            grid-row: 4;
+        }
+
+        .list-group .delete {
+            grid-row: 1;
+            grid-column: 3;
+        }
+
+        .list-group.visible .delete {
+            grid-row: 1/5;
+            grid-column: 3;
+        }
+
+    }
+</style>
+<script>
+    "use strict";
+    const dataPath = "./data.json";
+    const settings = "./settings.json";
+    const listWrapper = document.getElementById("list-wrapper");
+
+    function menu() {
+        document.getElementById("aside").classList.toggle("visible");
+        document.getElementById("menu-toggle").classList.toggle("visible")
+    };
+
+    function visible(mode) {
+        const active = document.querySelectorAll(".active");
+        const inactive = document.querySelectorAll(".inactive");
+
+        switch (mode) {
+            case "within":
+                for (let i=0; i<inactive.length; i++){
+                    inactive[i].style.cssText = "border-bottom: var(--color-900) 0px solid; height: 0rem; margin: 0 0 0rem; padding: 0rem 3%;";
+                }
+                break;
+            case "all":
+                for (let i=0; i<inactive.length; i++){
+                    inactive[i].style.cssText = "";
+                }
+                break;
+        };
+    };
+
+    function openButton() {
+        const eventTarget = event.target.parentNode.parentNode;
+        const childrenButton = eventTarget.querySelectorAll(".button").length;
+        eventTarget.classList.toggle("open");
+        if (eventTarget.classList.contains("open")) {
+            eventTarget.style.height = `calc(${4 * childrenButton -1}rem + ${2 * childrenButton}px)`;
+        } else {
+            eventTarget.style.height = "calc(3rem + 2px)";
+        };
+    }
+
+    function notification(mode, contentsData) {
+        const notificationArea = document.getElementById("override");
+        const time = new Date().getTime();
+        switch (mode) {
+            case "modeChange":
+                break;
+            case "create":
+                let notificationItem = `
+                    <div id=${time} class="notification-container in">
+                        <h2 class="notification-title">${contentsData["title"]}</h2>
+                        <a class="notification-close-button" onclick="notification('out')"><svg id="cross" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48"><defs><style>.cls-1,.cls-2{fill:none;}.cls-2{stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style></defs><g id="レイヤー_2" data-name="レイヤー 2"><g id="icon_data"><line class="cls-2" x1="12.13" y1="12.63" x2="36.13" y2="36.13"/><line class="cls-2" x1="12.38" y1="36.38" x2="35.88" y2="12.38"/></g></g></svg></a>
+                        <p class="notification-contents">${contentsData["description"]}</p>
+                    </div>
+                `
+                notificationArea.innerHTML += notificationItem;
+                setTimeout(()=>{
+                    document.getElementById(time).classList.remove("in");
+                    document.getElementById(time).removeAttribute("id", time);
+                    document.getElementById("clear-notifications").classList.add("visible");
+                }, 900);
+                break;
+            case "out":
+                const eventTargetFrame = event.target.parentNode.parentNode;
+                eventTargetFrame.classList.remove("in");
+                event.target.parentNode.remove();
+                setTimeout(()=>{eventTargetFrame.classList.add("out");}, 10);
+                setTimeout(()=>{eventTargetFrame.remove();}, 900);
+                if (eventTargetFrame.parentNode.querySelectorAll(".notification-container").length == 1)document.getElementById("clear-notifications").classList.remove("visible");
+                break;
+            case "clear":
+                function clearFinish() {
+                    setTimeout(()=>{
+                        const notificationsUndeleted = document.querySelectorAll(".out");
+                        for (let i = 0; i < notificationsUndeleted.length; i++){
+                            notificationsUndeleted[i].remove();
+                        };
+                        document.getElementById("clear-notifications").classList.remove("visible");
+                    }, 900);
+                };
+                const notifications = document.querySelectorAll(".notification-container");
+                let i = notifications.length
+                if (i > 0) {
+                    const clear = setInterval(()=>{
+                        i--
+                        notifications[i].classList.add("out");
+                        if (i<=0){
+                            clearFinish();
+                            clearInterval(clear);
+                        };
+                    },100);
+                } else {
+                    document.getElementById("clear-notifications").classList.remove("visible");
+                }
+                break;
+            case "error":
+                let notificationErrorItem = `
+                    <div id=${time} class="notification-container error in">
+                        <h2 class="notification-title">${contentsData["title"]}</h2>
+                        <a class="notification-close-button" onclick="notification('out')"><svg id="cross" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48"><defs><style>.cls-1,.cls-2{fill:none;}.cls-2{stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style></defs><g id="レイヤー_2" data-name="レイヤー 2"><g id="icon_data"><line class="cls-2" x1="12.13" y1="12.63" x2="36.13" y2="36.13"/><line class="cls-2" x1="12.38" y1="36.38" x2="35.88" y2="12.38"/></g></g></svg></a>
+                        <p class="notification-contents">${contentsData["description"]}</p>
+                    </div>
+                `
+                notificationArea.innerHTML += notificationErrorItem;
+                setTimeout(()=>{
+                    document.getElementById(time).classList.remove("in");
+                    document.getElementById(time).removeAttribute("id", time);
+                    document.getElementById("clear-notifications").classList.add("visible");
+                }, 900);
+                break;
+            case "warning":
+                let notificationWarningItem = `
+                    <div id="${time}" class="notification-container warning in">
+                        <h2 class="notification-title">${contentsData["title"]}</h2>
+                        <a class="notification-close-button" onclick="notification('out')"><svg id="cross" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 48 48"><defs><style>.cls-1,.cls-2{fill:none;}.cls-2{stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style></defs><g id="レイヤー_2" data-name="レイヤー 2"><g id="icon_data"><line class="cls-2" x1="12.13" y1="12.63" x2="36.13" y2="36.13"/><line class="cls-2" x1="12.38" y1="36.38" x2="35.88" y2="12.38"/></g></g></svg></a>
+                        <p class="notification-contents">${contentsData["description"]}</p>
+                    </div>
+                `
+                notificationArea.innerHTML += notificationWarningItem;
+                setTimeout(()=>{
+                    document.getElementById(time).classList.remove("in");
+                    document.getElementById(time).removeAttribute("id", time);
+                    document.getElementById("clear-notifications").classList.add("visible");
+                }, 900);
+                break;
+            default:
+                console.error("Undefined mode");
+                notification("error", {title:"Error", description:`通知操作における "${mode}" は未定義です。`})
+                break;
+        };
+    };
+
+    function keyDone(id) {
+        console.log(id)
+        const eventTargetFrame = event.target.parentNode.parentNode;
+        console.log(eventTargetFrame)
+
+        const headers = {
+            'Accept': 'application/json',
+            'content-type': 'application/x-www-form-urlencoded; charset=utf-8;'
+        };
+        fetch(`/post?type=done&key=${id}`, {
+            method: 'POST',
+            headers : headers
+        })
+        .then(()=>{
+            eventTargetFrame.getElementsByClassName("checkbox")[0].classList.add("checked");
+            notification('create', {title: '完了', description: `"${eventTargetFrame.getElementsByClassName("title")[0].innerHTML}" を完了登録しました。`});
+        });
+    }
+
+    function keyDelete(id) {
+        const eventTargetFrame = event?event.target.parentNode.parentNode:undefined;
+        const headers = {
+            'Accept' : '*/*',
+            'content-type' : 'application/x-www-form-urlencoded; charset=utf-8;'
+        };
+        if(eventTargetFrame){
+            fetch(`/post?type=delete&key=${id}`, {
+                method : 'POST',
+                headers: headers
+            })
+            .then(()=>{
+                if(eventTargetFrame){
+                    notification('create', {title: '削除', description: `"${eventTargetFrame.getElementsByClassName("title")[0].innerHTML}" を削除しました。`});
+                    eventTargetFrame.classList.add("out");
+                    event.target.parentNode.remove();
+                    setTimeout(()=>eventTargetFrame.remove(), 900);
+                }
+            });
+        } else {
+            document.getElementById(id).remove();
+        }
+    };
+
+    function listUpdate(link) {
+        const headers = {
+            'Accept' : 'application/json',
+            'content_type' : 'application/x-www-form-urlencoded; charset=utf-8;'
+        };
+
+        const fetchURL = `/post?type=update&key=${link}`;
+
+        fetch(fetchURL, {
+            method : "POST",
+            headers : headers
+        })
+        .then(res=>res.json())
+        .then(userData=>{
+            console.log(userData)
+            const classesKeys = Object.keys(userData.classDetails);
+            let insertItem = "";
+            for (let i=0; i<classesKeys.length; i++) {
+                const classData = userData.classDetails[classesKeys[i]];
+                let active = classData.active?"active":"inactive";
+                let className = userData.classList[classData.id.substr(2)];
+                classData.start=classData.start?classData.start:"";
+                classData.end=classData.end?classData.end:"";
+
+                insertItem += `
+                <li id="${classesKeys[i]}" class="list-group ${active}" data-id="${classesKeys[i]}" data-class="${className}" data-type="${classData.type}" data-start="${classData.start.replace(/ |:|\//g,"")}" data-end="${classData.end.replace(/ |:|\//g,"")}">
+                    <div class="list-items checkbox onclick="keyDone('${classesKeys[i]}')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><defs><style>.cls-1,.cls-2{fill:none;}.cls-2{stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style></defs><g id="レイヤー_2" data-name="レイヤー 2"><g id="icon_data"><polyline class="cls-2" points="11.13 28.13 19.33 36.33 39.16 17.51"/></g></g></svg></div>
+                    <div class="list-items title">${classData.name}</div>
+                    <div class="list-items class-name">${className}</div>
+                    <div class="list-items type">${classData.type}</div>
+                    <div class="list-items date">
+                        <div class="start">${classData.start}</div>
+                        <div class="end">${classData.end}</div>
+                    </div>
+                    <div class="list-items delete" onclick="keyDelete('${classesKeys[i]}')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><defs><style>.a{fill: none;stroke-linecap: round;stroke-linejoin: round;stroke-width: 2px;}</style></defs><g><path class="a" d="M32.54,19,31.76,35a2.21,2.21,0,0,1-2.21,2.08H18.45A2.21,2.21,0,0,1,16.24,35L15.46,19"/><line class="a" x1="21.26" y1="21.44" x2="21.26" y2="31.19"/><line class="a" x1="26.71" y1="21.44" x2="26.71" y2="31.19"/><polygon class="a" points="28.25 15.83 19.71 15.83 21.26 10.88 26.71 10.88 28.25 15.83"/><path class="a" d="M14.5,15.9h19"/></g></svg></div>
+                </li>
+                `
+            };
+            listWrapper.innerHTML = `
+            <li class="list-header list-group">
+                <input type="button" class="list-items checkbox" value="完了" onclick="check()"></input>
+                <input type="button" class="list-items title" value="名称" onclick="sort('name')"></input>
+                <input type="button" class="list-items class-name" value="科目名" onclick="sort('className')"></input>
+                <input type="button" class="list-items type" value="属性" onclick="sort('type')"></input>
+                <div class="list-items date">
+                    <input type="button" class="start" value="開始日" onclick="sort('startDate')"></input>
+                    <input type="button" class="end" value="締切日" onclick="sort('endDate')"></input>
+                </div>
+                <input type="button" class="list-items delete" value="削除"></input>
+            </li>
+            ${insertItem}`;
+            const now = new Date();
+            notification("create", {title: "更新完了", description: `更新完了 ${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`});
+        })
+        .catch(()=>{
+            console.error("Failed to update.");
+            notification('error', {title: 'Failed to update', description: '更新に失敗しました。'})
+        });
+    };
+
+    function sortedViews(orderedItems, reverse) {
+        const listWrapper = document.getElementById('list-wrapper');
+        if (reverse)orderedItems=orderedItems.reverse();
+        for (let i=0; i<orderedItems.length; i++) {
+            document.getElementById(orderedItems[i].id).style.order = i;
+        };
+    };
+
+    function sort(mode) {
+        const listWrapper = document.getElementById('list-wrapper');
+        const reverse = listWrapper.classList.contains(mode);
+        const elements = document.getElementsByClassName('list-group');
+        let itemsData = [];
+        if (reverse) {
+            listWrapper.classList.remove(mode);
+        } else {
+            listWrapper.classList.remove(...listWrapper.classList);
+            listWrapper.classList.add(mode);
+        };
+        for (let i = 1; i < listWrapper.childNodes.length; i++) {
+            const element = elements[i];
+            if(element){
+                const childData = {
+                    id: element.dataset.id,
+                    type: element.dataset.type,
+                    class: element.dataset.class,
+                    dataStart: element.dataset.start,
+                    dataEnd: element.dataset.end
+                };
+                itemsData.push(childData);
+            };
+        };
+        switch(mode){
+            case "name":
+                itemsData.sort((a, b) => {
+                    if(a.name < b.name)return -1;
+                    if(a.name > b.name)return 1;
+                    return 0;
+                });
+                sortedViews(itemsData, reverse);
+                break;
+            case "className":
+                itemsData.sort((a, b) => {
+                    if(a.class < b.class)return -1;
+                    if(a.class > b.class)return 1;
+                    return 0;
+                });
+                sortedViews(itemsData, reverse);
+                break;
+            case "type":
+                itemsData.sort((a, b) => {
+                    if(a.type < b.type)return -1;
+                    if(a.type > b.type)return 1;
+                    return 0;
+                });
+                sortedViews(itemsData, reverse);
+                break;
+            case "startDate":
+                itemsData.sort((a, b) => {
+                    if(a.dataStart < b.dataStart)return -1;
+                    if(a.dataStart > b.dataStart)return 1;
+                    return 0;
+                });
+                sortedViews(itemsData, reverse);
+                break;
+            case "endDate":
+                itemsData.sort((a, b) => {
+                    if(a.dataEnd < b.dataEnd)return -1;
+                    if(a.dataEnd > b.dataEnd)return 1;
+                    return 0;
+                });
+                sortedViews(itemsData, reverse);
+                break;
+            default:
+                notification("error", {title: "Error", description: `未定義の並べ替えモード "${mode}" が入力されました。`});
+                break;
+        };
+    }
+
+    function shutdown() {
+        fetch("/post?type=shutdown",{
+            method: 'POST',
+            headers : {
+                'Accept': 'application/json',
+                'content-type': 'application/x-www-form-urlencoded; charset=utf-8;'
+            }
+        })
+        .then(()=>{window.close()})
+        .catch(console.error);
+    }
+
+    fetch(settings)
+    .then(res=>{
+        return res=res.json()
+    })
+    .then(settingsData => {
+        console.log(settingsData);
+        document.getElementById('aside-version').innerHTML = `ver. ${settingsData.LMSM.version}`;
+    })
+    .catch(console.error);
+
+    fetch(dataPath)
+    .then(res=>{
+        return res=res.json()
+    })
+    .then(userData => {
+        console.log(userData);
+        document.getElementById('user-ID').innerHTML = userData.userID;
+        const classesKeys = Object.keys(userData.classDetails);
+        let insertItem = "";
+        for (let i=0; i<classesKeys.length; i++) {
+            const classData = userData.classDetails[classesKeys[i]];
+            let active = classData.active?"active":"inactive";
+            let className = userData.classList[classData.id.substr(2)];
+            classData.start=classData.start?classData.start:"";
+            classData.end=classData.end?classData.end:"";
+
+            insertItem += `
+            <li id="${classesKeys[i]}" class="list-group ${active}" data-id="${classesKeys[i]}" data-class="${className}" data-type="${classData.type}" data-start="${classData.start.replace(/ |:|\//g,"")}" data-end="${classData.end.replace(/ |:|\//g,"")}">
+                <div class="list-items checkbox" onclick="keyDone('${classesKeys[i]}')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><defs><style>.cls-1,.cls-2{fill:none;}.cls-2{stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style></defs><g id="レイヤー_2" data-name="レイヤー 2"><g id="icon_data"><polyline class="cls-2" points="11.13 28.13 19.33 36.33 39.16 17.51"/></g></g></svg></div>
+                <div class="list-items title">${classData.name}</div>
+                <div class="list-items class-name">${className}</div>
+                <div class="list-items type">${classData.type}</div>
+                <div class="list-items date">
+                    <div class="start">${classData.start}</div>
+                    <div class="end">${classData.end}</div>
+                </div>
+                <div class="list-items delete" onclick="keyDelete('${classesKeys[i]}')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><defs><style>.a{fill: none;stroke-linecap: round;stroke-linejoin: round;stroke-width: 2px;}</style></defs><g><path class="a" d="M32.54,19,31.76,35a2.21,2.21,0,0,1-2.21,2.08H18.45A2.21,2.21,0,0,1,16.24,35L15.46,19"/><line class="a" x1="21.26" y1="21.44" x2="21.26" y2="31.19"/><line class="a" x1="26.71" y1="21.44" x2="26.71" y2="31.19"/><polygon class="a" points="28.25 15.83 19.71 15.83 21.26 10.88 26.71 10.88 28.25 15.83"/><path class="a" d="M14.5,15.9h19"/></g></svg></div>
+            </li>
+            `
+        };
+        listWrapper.innerHTML = `
+            <li class="list-header list-group">
+                <input type="button" class="list-items checkbox" value="完了" onclick="check()"></input>
+                <input type="button" class="list-items title" value="名称" onclick="sort('name')"></input>
+                <input type="button" class="list-items class-name" value="科目名" onclick="sort('className')"></input>
+                <input type="button" class="list-items type" value="属性" onclick="sort('type')"></input>
+                <div class="list-items date">
+                    <input type="button" class="start" value="開始日" onclick="sort('startDate')"></input>
+                    <input type="button" class="end" value="締切日" onclick="sort('endDate')"></input>
+                </div>
+                <input type="button" class="list-items delete" value="削除"></input>
+            </li>
+            ${insertItem}`;
+        return userData
+    })
+    .then(userData=>{
+        const listWrapper = document.getElementById("list-wrapper");
+        const doneData = userData.done?userData.done:[];
+        const deleteData = userData.invisible?userData.invisible:[];
+        console.log(doneData, deleteData);
+        for (let i=0; i<doneData.length; i++) {
+            document.getElementById(doneData[i]).getElementsByClassName("checkbox")[0].classList.add("checked");
+        }
+        for (let i=0; i<deleteData.length; i++) {
+            keyDelete(deleteData[i]);
+        }
+    })
+    .catch(console.error);
+</script>
+</html>

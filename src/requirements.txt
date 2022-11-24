@@ -1,0 +1,17 @@
+async-generator
+attrs
+certifi
+cffi
+chromedriver-autoinstaller
+h11
+idna
+outcome
+pycparser
+PySocks
+selenium==4.5.0
+sniffio
+sortedcontainers
+trio
+trio-websocket
+urllib3
+wsproto
