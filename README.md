@@ -3,7 +3,8 @@
 東京都市大学WebClassを一覧表示するアプリケーションです。
 
 **ベータ版です。コンパイルから自分でできる方のみ使用可能です。**
-##コンパイル方法
+## コンパイル方法
+
 1. [Rust](https://www.rust-lang.org/ja/)をインストールする 
 2. [Go](https://go.dev)をインストールする
 3. ~/LMSM で cargo build --release　を実行
