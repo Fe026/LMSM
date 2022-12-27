@@ -11,10 +11,12 @@ import (
 	"os"
 	"os/exec"
 	"reflect"
+	"runtime"
 	"time"
 )
 
 const directory = "GUI/";
+const  operatingSystem = runtime.GOOS;
 
 func main() {
 	var portObj = argument_parser();
@@ -99,8 +101,12 @@ func post(w http.ResponseWriter, r *http.Request) {
 }
 
 func post_update(w http.ResponseWriter, r *http.Request) {
-	var class_list = "False"
+	var class_list = "False";
 	var update_list = "";
+	var pythonCommand = "python";
+	if operatingSystem == "darwin" {
+		pythonCommand = "python3";
+	}
 	switch r.FormValue("key") {
 		case "c":
 			class_list = "True";
@@ -115,10 +121,10 @@ func post_update(w http.ResponseWriter, r *http.Request) {
 			update_list = r.FormValue("key");
 	}
 	if len(update_list) != 0 {
-		err := exec.Command("python", "checker.py", "-c", class_list, "-u", update_list).Run();
+		err := exec.Command(pythonCommand, "checker.py", "-c", class_list, "-u", update_list).Run();
 		fmt.Println(err);
 	} else {
-		err := exec.Command("python", "checker.py", "-c", class_list).Run();
+		err := exec.Command(pythonCommand, "checker.py", "-c", class_list).Run();
 		fmt.Println(err);
 	}
 	data_json := loadJson("./GUI/data.json");

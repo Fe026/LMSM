@@ -1,6 +1,7 @@
 import os
 import shutil
 import sys
+import platform
 from argparse import ArgumentParser
 import re
 import time
@@ -150,15 +151,20 @@ class userInterface:
 class browserControl:
     def __init__(self, userData):
         self.userData = userData
+        self.browser = webdriver.Chrome()
         __chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]
-        self.driver_path = f'./{__chrome_ver}/chromedriver.exe'
-        if not os.path.exists(self.driver_path):
-            chromedriver_autoinstaller.install(True)
-        __options = webdriver.ChromeOptions()
-        __options.add_argument(f"user-data-dir={os.path.join(os.path.dirname(__file__), 'Chrome')}")
-        __options.add_argument("--profile-directory=Profile HWC")
-        __options.add_experimental_option("excludeSwitches", ["enable-logging"])
-        self.browser = webdriver.Chrome(service=fs.Service(executable_path=self.driver_path), options = __options)
+        print(platform.system())
+        if platform.system() == 'Windows':
+            self.driver_path = f'./{__chrome_ver}/chromedriver.exe'
+            if not os.path.exists(self.driver_path):
+                chromedriver_autoinstaller.install(True)
+            __options = webdriver.ChromeOptions()
+            __options.add_argument(f"user-data-dir={os.path.join(os.path.dirname(__file__), 'Chrome')}")
+            __options.add_argument("--profile-directory=Profile HWC")
+            __options.add_experimental_option("excludeSwitches", ["enable-logging"])
+            self.browser = webdriver.Chrome(service=fs.Service(executable_path=self.driver_path), options = __options)
+        elif platform.system() == 'MacOS':
+            self.browser = webdriver.Chrome()
 
     def login(self):
         self.browser.get("https://webclass.tcu.ac.jp/")
@@ -310,6 +316,7 @@ class get_args():
 
 
 class __main__:
+    print("Checker is running")
     try:
         shutil.rmtree("./Chrome")
     except FileNotFoundError:

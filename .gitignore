@@ -3,7 +3,9 @@ data.json.backup
 Chrome
 .vscode
 target
+server
 server.exe
+LMSM
 LMSM.exe
 installer.bat
 run.py

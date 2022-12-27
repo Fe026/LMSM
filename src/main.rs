@@ -2,6 +2,8 @@ use std::{thread, time::Duration, fs::File, io::Read, process::{self, Command}};
 use serde::Deserialize;
 use serde_json::Value;
 
+const BROWSER_COMMAND: &str = if cfg!(target_os = "windows") {"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"} else {"open"};
+const SERVER_COMMAND: &str = if cfg!(target_os = "windows") {"src/server.exe"} else {"src/server"};
 
 fn read_json(filename: &str) -> Value {
     println!("Reading json file: {}", filename);
@@ -27,39 +29,42 @@ fn start_go_server() {
     }
 
     let deserialized_request_addresses: Vec<RequestAddress> = serde_json::from_str(&request_addresses).unwrap();
-
     let __using_address: Vec<String> = String::from_utf8_lossy(&Command::new("netstat").arg("-nao").output().expect("Failed to check using_address").stdout).lines().fold(Vec::new(), |mut s, i| {s.push(i.to_string());s});
     
     for request_address in deserialized_request_addresses {
         let req = request_address.hostname.to_string()+ ":" + &request_address.port.to_string();
-        for (i, __process) in __using_address.iter().enumerate() {
-            let process = __process.split_whitespace()
-                .fold(Vec::new(), |mut s, i| {
-                    s.push(i.to_string());
-                    s
-                });
-            if process.len() > 4 && i > 3{
-                let pid: u32 = process[4].parse().unwrap();
-                if pid > 100 {
-                    let ip = process[2].as_str();
-                    if ip == req {
-                        println!("ip: {}, pid: {}", ip, process[4]);
-                        Command::new("taskkill")
-                            .args(&["/f", "/pid", process[4].as_str()])
-                            .spawn()
-                            .expect("Failed to execute taskkill");
+
+        if cfg!(target_os = "windows") {
+            for (i, __process) in __using_address.iter().enumerate() {
+                let process = __process.split_whitespace()
+                    .fold(Vec::new(), |mut s, i| {
+                        s.push(i.to_string());
+                        s
+                    });
+                    if process.len() > 4 && i > 3{
+                        let pid: u32 = process[4].parse().unwrap();
+                    if pid > 100 {
+                        let ip = process[2].as_str();
+                        if ip == req {
+                            println!("ip: {}, pid: {}", ip, process[4]);
+                            Command::new("taskkill")
+                                .args(&["/f", "/pid", process[4].as_str()])
+                                .spawn()
+                                .expect("Failed to execute taskkill");
+                            };
+                        };
                     };
                 };
-            };
-        };
+        }
+    
 
         thread::spawn(move || {
-            let mut go_server = Command::new(".\\src\\server.exe")
+            let mut go_server = Command::new(SERVER_COMMAND)
                 .current_dir(".\\src\\")
                 .args(["-h", &request_address.hostname, "-p", &request_address.port.to_string()])
                 .spawn()
                 .expect("Failed to start go server");
-    
+
             match go_server.try_wait() {
                 Ok(Some(status)) => println!("exited with: {}", status),
                 Ok(None) => {
@@ -72,12 +77,11 @@ fn start_go_server() {
         });
         thread::sleep(Duration::from_millis(10));
         let open_url = String::new()+"--app=https://"+&req;
-        Command::new("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe")
+        Command::new(BROWSER_COMMAND)
             .arg(open_url)
             .spawn()
             .expect("Failed to start Google Chrome");
     };
-
 }
 
 fn main() {
